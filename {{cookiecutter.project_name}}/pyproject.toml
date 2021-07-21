@@ -1,0 +1,19 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires      = ["poetry-core>=1.0.0"]
+
+[tool.poetry]
+authors     = ["Harrison Totty <harrisongtotty@gmail.com>"]
+description = "{{ cookiecutter.project_desc }}"
+name        = "{{ cookiecutter.project_name }}"
+readme      = "README.md"
+repository  = "https://github.com/HarrisonTotty/{{ cookiecutter.project_name }}"
+version     = "0.1.0"
+
+[tool.poetry.dependencies]
+kopf       = "^{{ cookiecutter.kopf_version }}"
+kubernetes = "^{{ cookiecutter.kubernetes_version }}"
+python     = "^{{ cookiecutter.python_version }}"
+pyyaml     = "*"
+
+[tool.poetry.dev-dependencies]

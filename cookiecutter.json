@@ -1,0 +1,14 @@
+{
+    "project_name": "example",
+    "project_title": "Example Kubernetes Operator",
+    "project_desc": "An example kubernetes operator.",
+    "crd_group": "k8s.totty.dev",
+    "crd_kind": "ExampleObject",
+    "crd_singular": "{{ cookiecutter.crd_kind.lower() }}",
+    "crd_plural": "{{ cookiecutter.crd_singular + 's' }}",
+    "python_version": "3.9",
+    "poetry_version": "1.1.7",
+    "kopf_version": "1.32",
+    "kubernetes_version": "17.17",
+    "module_name": "{{ cookiecutter.project_name.replace('-', '_') }}"
+}
