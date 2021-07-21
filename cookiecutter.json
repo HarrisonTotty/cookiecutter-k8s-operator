@@ -1,5 +1,5 @@
 {
-    "project_name": "example",
+    "project_name": "k8s-op-example",
     "project_title": "Example Kubernetes Operator",
     "project_desc": "An example kubernetes operator.",
     "crd_group": "k8s.totty.dev",
