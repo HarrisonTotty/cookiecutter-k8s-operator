@@ -11,11 +11,21 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
 
 RUN pip install "poetry==$POETRY_VERSION"
 
-FROM poetry as build
+FROM poetry as import_project
 
 ADD . /project
 
 WORKDIR /project
+
+FROM import_project as build_tests
+
+RUN poetry install \
+    --no-interaction \
+    --no-ansi
+
+RUN pytest tests
+
+FROM import_project as build_release
 
 RUN poetry install \
     --no-dev \

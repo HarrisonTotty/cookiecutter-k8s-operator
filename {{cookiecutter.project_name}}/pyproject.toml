@@ -17,3 +17,4 @@ python     = "^{{ cookiecutter.python_version }}"
 pyyaml     = "*"
 
 [tool.poetry.dev-dependencies]
+pytest = "*"
