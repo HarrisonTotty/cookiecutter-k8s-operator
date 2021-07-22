@@ -9,9 +9,15 @@
 
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: '{{ cookiecutter.project_name }}'
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: '{{ cookiecutter.project_name }}'
+  namespace: '{{ cookiecutter.project_name }}'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -75,11 +81,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: '{{ cookiecutter.project_name }}'
+    namespace: '{{ cookiecutter.project_name }}'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: '{{ cookiecutter.project_name }}'
+  namespace: '{{ cookiecutter.project_name }}'
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -87,14 +95,17 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: '{{ cookiecutter.project_name }}'
+    namespace: '{{ cookiecutter.project_name }}'
 
 
 # --------------------------------- DEPLOYMENT ---------------------------------
 
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: '{{ cookiecutter.project_name }}'
+  namespace: '{{ cookiecutter.project_name }}'
 spec:
   replicas: 1
   strategy:
