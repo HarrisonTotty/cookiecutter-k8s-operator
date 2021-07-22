@@ -1,0 +1,9 @@
+# Example Manifest
+# ----------------
+
+---
+apiVersion: '{{ cookiecutter.crd_group }}/v1'
+kind: '{{ cookiecutter.crd_kind }}'
+metadata:
+  name: '{{ cookiecutter.crd_singular }}-example'
+spec: {}
