@@ -9,13 +9,13 @@ import yaml
 import {{ cookiecutter.module_name }} as op
 
 
-def validate_crds():
+def test_crds():
     '''
     Verifies that the custom resource definitions associated with this operator
     are valid.
     '''
-    crd_text = pkgutil.get_data(op, 'crds.yaml')
-    crd_data = yaml.load_all(crd_text)
+    crd_text = pkgutil.get_data(op.__name__, 'crds.yaml')
+    crd_data = yaml.safe_load_all(crd_text)
     for crd in crd_data:
         assert crd['apiVersion'] == 'apiextensions.k8s.io/v1'
         assert crd['kind'] == 'CustomResourceDefinition'
@@ -31,6 +31,7 @@ def validate_crds():
             assert isinstance(spec['names']['shortNames'], list)
         assert spec['scope'] in ['Namespaced', 'Cluster']
         assert isinstance(spec['versions'], list)
+        assert len(spec['versions']) > 0
         for version in spec['versions']:
             assert isinstance(version['name'], str)
             assert isinstance(version['served'], bool)

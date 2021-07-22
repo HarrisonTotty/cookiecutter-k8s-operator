@@ -10,3 +10,5 @@ tmp/
 *.egg
 build
 htmlcov
+
+dist/

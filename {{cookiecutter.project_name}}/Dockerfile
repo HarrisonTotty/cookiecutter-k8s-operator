@@ -1,4 +1,5 @@
 FROM python:{{ cookiecutter.python_version }} as poetry
+
 MAINTAINER Harrison Totty <harrisongtotty@gmail.com>
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
@@ -11,27 +12,35 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
 
 RUN pip install "poetry==$POETRY_VERSION"
 
-FROM poetry as import_project
+
+FROM poetry as import
 
 ADD . /project
 
 WORKDIR /project
 
-FROM import_project as build_tests
+
+FROM import as build
 
 RUN poetry install \
-    --no-interaction \
-    --no-ansi
-
-RUN pytest tests
-
-FROM import_project as build_release
-
-RUN poetry install \
+    --no-ansi \
     --no-dev \
     --no-interaction \
-    --no-ansi
+    --no-root \
+    && poetry build \
+    --format wheel \
+    && pip install dist/*.whl
 
-FROM build as runtime
+
+FROM build as test
+
+RUN poetry install \
+    --no-ansi \
+    --no-interaction \
+    --no-root \
+    && pytest
+
+
+FROM build as release
 
 CMD kopf run -A -m {{ cookiecutter.module_name }}
