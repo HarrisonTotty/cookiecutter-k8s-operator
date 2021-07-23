@@ -28,18 +28,18 @@ async def startup(logger, **kwargs):
     Provides additional events to occur upon startup of the operator.
     '''
     logging.debug('Loading kubernetes client configuration...')
-    # try:
-    #     kubernetes.config.load_kube_config()
-    # except Exception as e:
-    #     raise Exception(f'Unable to handle operator startup - unable to load k8s config - {e}')
-    # logging.debug('Loading custom resource definition(s)...')
-    # try:
-    #     data = yaml.safe_load_all(pkgutil.get_data(__name__, 'crds.yaml'))
-    # except Exception as e:
-    #     raise Exception(f'Unable to handle operator startup - unable to load CRDs - {e}')
-    # logging.debug('Creating custom resource definition(s)...')
-    # try:
-    #     client = kubernetes.client.ApiClient()
-    #     kubernetes.utils.create_from_dict(client, data)
-    # except Exception as e:
-    #     raise Exception(f'Unable to handle operator startup - unable to create CRDs - {e}')
+    try:
+        kubernetes.config.load_kube_config()
+    except Exception as e:
+        raise Exception(f'Unable to handle operator startup - unable to load k8s config - {e}')
+    logging.debug('Loading custom resource definition(s)...')
+    try:
+        data = yaml.safe_load_all(pkgutil.get_data(__name__, 'crds.yaml'))
+    except Exception as e:
+        raise Exception(f'Unable to handle operator startup - unable to load CRDs - {e}')
+    logging.debug('Creating custom resource definition(s)...')
+    try:
+        client = kubernetes.client.ApiClient()
+        kubernetes.utils.create_from_dict(client, data)
+    except Exception as e:
+        raise Exception(f'Unable to handle operator startup - unable to create CRDs - {e}')
