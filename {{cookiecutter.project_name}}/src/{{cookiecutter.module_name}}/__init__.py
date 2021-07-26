@@ -6,7 +6,6 @@
 
 __VERSION__ = "0.1.0"
 
-import asyncio
 import kopf
 import kubernetes
 import logging
@@ -15,7 +14,7 @@ import yaml
 
 
 @kopf.on.cleanup()
-async def cleanup(logger, **kwargs):
+def cleanup(logger, **kwargs):
     '''
     Provides additional events to occur upon shutdown of the operator.
     '''
@@ -23,7 +22,7 @@ async def cleanup(logger, **kwargs):
 
 
 @kopf.on.startup()
-async def startup(logger, **kwargs):
+def startup(logger, **kwargs):
     '''
     Provides additional events to occur upon startup of the operator.
     '''
