@@ -50,7 +50,7 @@ def startup(settings: kopf.OperatorSettings, **kwargs):
         raise Exception(f'Unable to load initial kubernetes cluster configuration - {e}')
     logging.debug('Loading custom resource definition(s)...')
     try:
-        crds = list(yaml.safe_load_all(pkgutil.get_data(__name__, 'crds.yaml')))
+        crds = list(yaml.safe_load_all(pkgutil.get_data(__name__, 'crds.yaml'))) # type: ignore[arg-type]
     except Exception as e:
         raise Exception(f'Unable to handle operator startup - unable to load CRDs - {e}')
     logging.debug('Creating custom resource definition(s)...')
