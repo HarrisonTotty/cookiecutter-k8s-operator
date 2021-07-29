@@ -5,6 +5,6 @@ set -e
 
 trap 'exit 100' INT
 
-VERSION=$(grep version pyproject.toml | awk -F '"' '{ print $2 }')
+VERSION=$(grep -oP '^version\s*=\s*"\d+\.\d+\.\d+"$' pyproject.toml | awk -F '"' '{ print $2 }')
 
 docker build -t "{{ cookiecutter.crd_group }}/{{ cookiecutter.project_name }}:${VERSION}" .

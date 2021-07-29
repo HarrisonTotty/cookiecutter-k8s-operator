@@ -2,6 +2,20 @@
 build-backend = "poetry.core.masonry.api"
 requires      = ["poetry-core>=1.0.0"]
 
+[tool.mypy]
+files                  = "src/**/*.py"
+ignore_errors          = true
+ignore_missing_imports = true
+pretty                 = true
+python_version         = "{{ cookiecutter.python_version }}"
+show_column_numbers    = true
+show_error_codes       = true
+show_error_context     = true
+
+[[tool.mypy.overrides]]
+ignore_errors = false
+module        = "{{ cookiecutter.module_name }}"
+
 [tool.poetry]
 authors     = ["Harrison Totty <harrisongtotty@gmail.com>"]
 description = "{{ cookiecutter.project_desc }}"
@@ -18,9 +32,14 @@ python     = "^{{ cookiecutter.python_version }}"
 pyyaml     = "*"
 
 [tool.poetry.dev-dependencies]
-pytest = "*"
+mypy            = "*"
+pytest          = "*"
+pytest-aio      = "*"
+pytest-cov      = "*"
+pytest-randomly = "*"
 
 [tool.pytest.ini_options]
+addopts          = "--cov={{ cookiecutter.module_name }}"
 python_files     = "*.py"
 python_functions = "test_*"
 testpaths        = "tests"

@@ -34,11 +34,9 @@ RUN poetry install \
 
 FROM build as test
 
-RUN poetry install \
-    --no-ansi \
-    --no-interaction \
-    --no-root \
-    && pytest
+RUN poetry install --no-ansi --no-interaction --no-root && \
+    mypy --install-types --non-interactive && \
+    pytest
 
 
 FROM build as release
