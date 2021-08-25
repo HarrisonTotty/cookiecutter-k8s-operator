@@ -1,0 +1,5 @@
+resources:
+  - 'resources/namespace.yaml'
+  - 'resources/service-account.yaml'
+  - 'resources/rbac.yaml'
+  - 'resources/deployment.yaml'

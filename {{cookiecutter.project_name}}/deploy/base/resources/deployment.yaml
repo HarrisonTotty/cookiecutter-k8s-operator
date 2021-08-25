@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ cookiecutter.project_name }}'
+  namespace: '{{ cookiecutter.project_name }}'
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: '{{ cookiecutter.project_name }}'
+  template:
+    metadata:
+      labels:
+        app: '{{ cookiecutter.project_name }}'
+    spec:
+      serviceAccountName: '{{ cookiecutter.project_name }}'
+      containers:
+        - name: 'operator'
+          image: '{{ cookiecutter.crd_group }}/{{ cookiecutter.project_name }}'

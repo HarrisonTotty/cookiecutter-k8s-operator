@@ -1,45 +1,21 @@
-# Operator Deployment Manifest
-# ----------------------------
-
-# The following file deploys the operator to the currently authenticated
-# kubernetes cluster.
-
-
-# ------------------------------ RBAC CONFIGURATION ----------------------------
-
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: '{{ cookiecutter.project_name }}'
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: '{{ cookiecutter.project_name }}'
-  namespace: '{{ cookiecutter.project_name }}'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: '{{ cookiecutter.project_name }}'
 rules:
-  # Framework: knowing which other operators are running (i.e. peering).
   - apiGroups: ['kopf.dev']
     resources: ['clusterkopfpeerings']
     verbs: ['get', 'list', 'patch', 'watch']
-  # Framework: runtime observation of namespaces & CRDs (addition/deletion).
   - apiGroups: ['apiextensions.k8s.io']
     resources: ['customresourcedefinitions']
     verbs: ['get', 'create', 'list', 'patch', 'watch']
   - apiGroups: ['']
     resources: ['namespaces']
     verbs: ['list', 'watch']
-  # Framework: admission webhook configuration management.
   - apiGroups: ['admissionregistration.k8s.io/v1', 'admissionregistration.k8s.io/v1beta1']
     resources: ['validatingwebhookconfigurations', 'mutatingwebhookconfigurations']
     verbs: ['create', 'patch']
-  # Application: read-only access for watching cluster-wide.
   - apiGroups: ['{{ cookiecutter.crd_group }}']
     resources: ['{{ cookiecutter.crd_plural }}']
     verbs: ['list', 'watch']
@@ -50,20 +26,15 @@ metadata:
   name: '{{ cookiecutter.project_name }}'
   namespace: '{{ cookiecutter.project_name }}'
 rules:
-  # Framework: knowing which other operators are running (i.e. peering).
   - apiGroups: ['kopf.dev']
     resources: ['kopfpeerings']
     verbs: ['get', 'list', 'patch', 'watch']
-  # Framework: posting the events about the handlers progress/errors.
   - apiGroups: ['']
     resources: ['events']
     verbs: ['create']
-  # Application: watching & handling for the custom resource we declare.
   - apiGroups: ['{{ cookiecutter.crd_group }}']
     resources: ['{{ cookiecutter.crd_plural }}']
     verbs: ['list', 'patch', 'watch']
-  # Application: other resources it produces and manipulates.
-  # Here, we create Jobs+PVCs+Pods, but we do not patch/update/delete them ever.
   - apiGroups: ['batch', 'extensions']
     resources: ['jobs']
     verbs: ['create']
@@ -97,29 +68,3 @@ subjects:
   - kind: ServiceAccount
     name: '{{ cookiecutter.project_name }}'
     namespace: '{{ cookiecutter.project_name }}'
-
-
-# --------------------------------- DEPLOYMENT ---------------------------------
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: '{{ cookiecutter.project_name }}'
-  namespace: '{{ cookiecutter.project_name }}'
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      application: '{{ cookiecutter.project_name }}'
-  template:
-    metadata:
-      labels:
-        application: '{{ cookiecutter.project_name }}'
-    spec:
-      serviceAccountName: '{{ cookiecutter.project_name }}'
-      containers:
-        - name: '{{ cookiecutter.project_name }}'
-          image: '{{ cookiecutter.crd_group }}/{{ cookiecutter.project_name }}'
